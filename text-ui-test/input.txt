@@ -1,5 +1,12 @@
-todo
-blah
 todo borrow book
+event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by Sunday
+list
+mark 2
+unmark 2
+delete 3
+todo 
+blah
+delete 10
+list
 bye
-
