@@ -13,7 +13,7 @@ public class Shin {
 
         while (true) {
             String input = scanner.nextLine();
-            String[] parts = input.split(" ", 2); // Split command and description
+            String[] parts = input.split(" ", 2);
             String command = parts[0];
 
             if (command.equals("bye")) {
@@ -46,16 +46,39 @@ public class Shin {
                 System.out.println("  " + tasks[taskIndex]);
                 System.out.println("____________________________________________________________");
 
+            } else if (command.equals("todo")) {
+                Task newTask = new Todo(parts[1]);
+                tasks[taskCount++] = newTask;
+                printTaskAdded(newTask, taskCount);
+
+            } else if (command.equals("deadline")) {
+                String[] details = parts[1].split("/by", 2);
+                Task newTask = new Deadline(details[0].trim(), details[1].trim());
+                tasks[taskCount++] = newTask;
+                printTaskAdded(newTask, taskCount);
+
+            } else if (command.equals("event")) {
+                String[] details = parts[1].split("/from|/to", 3);
+                Task newTask = new Event(details[0].trim(), details[1].trim(), details[2].trim());
+                tasks[taskCount++] = newTask;
+                printTaskAdded(newTask, taskCount);
+
             } else {
                 Task newTask = new Task(input);
-                tasks[taskCount] = newTask;
-                taskCount++;
-                System.out.println("____________________________________________________________");
-                System.out.println("added: " + input);
-                System.out.println("____________________________________________________________");
+                tasks[taskCount++] = newTask;
+                printTaskAdded(newTask, taskCount);
             }
         }
 
         scanner.close();
     }
+
+    private static void printTaskAdded(Task task, int taskCount) {
+        System.out.println("____________________________________________________________");
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        System.out.println("____________________________________________________________");
+    }
 }
+todo
