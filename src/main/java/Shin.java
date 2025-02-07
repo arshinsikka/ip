@@ -1,160 +1,127 @@
-import java.io.IOException;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-
 public class Shin {
-    private static final String FILE_PATH = "data/duke.txt";
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
 
-    public static void main(String[] args) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Hello! I'm Shin");
-        System.out.println("What can I do for you?");
-        System.out.println("____________________________________________________________");
-
-        Scanner scanner = new Scanner(System.in);
-        Storage storage = new Storage(FILE_PATH);
-        ArrayList<Task> tasks = new ArrayList<>();
-
-        // Load tasks from file
+    public Shin(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
         try {
-            tasks = storage.load();
-        } catch (IOException e) {
-            System.out.println("Failed to load tasks from file. Starting fresh.");
+            tasks = new TaskList(storage.load());
+        } catch (Exception e) {
+            ui.showLoadingError();
+            tasks = new TaskList();
         }
+    }
 
-        while (true) {
-            String input = scanner.nextLine();
-            String[] parts = input.split(" ", 2);
-            String command = parts[0];
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
 
+        while (!isExit) {
             try {
-                if (command.equals("bye")) {
-                    storage.save(tasks); // Save tasks before exiting
-                    System.out.println("____________________________________________________________");
-                    System.out.println("Bye. Hope to see you again soon!");
-                    System.out.println("____________________________________________________________");
-                    break;
+                String fullCommand = ui.readCommand();
+                ui.showLine();
+                String[] parts = Parser.parse(fullCommand);  // Get command & arguments
+                String command = parts[0];
 
-                } else if (command.equals("list")) {
-                    printTaskList(tasks);
+                switch (command) {
+                    case "bye":
+                        isExit = true;
+                        System.out.println("Bye. Hope to see you again soon!");
+                        break;
 
-                } else if (command.equals("event")) {
-                    try {
-                        String[] eventDetails = parts[1].split("/from|/to");
-                        Task newEvent = null; // Declare before try
+                    case "list":
+                        tasks.printTasks();
+                        break;
 
+                    case "todo":
+                        if (parts.length < 2) {
+                            ui.showError("Description for todo cannot be empty!");
+                            break;
+                        }
+                        Task newTodo = new Todo(parts[1]);
+                        tasks.addTask(newTodo);
+                        storage.save(tasks);
+                        ui.showTaskAdded(newTodo, tasks.size());
+                        break;
+
+                    case "deadline":
+                        if (parts.length < 2 || !parts[1].contains(" /by ")) {
+                            ui.showError("Invalid format! Use: deadline <desc> /by yyyy-MM-dd");
+                            break;
+                        }
+                        String[] deadlineParts = parts[1].split(" /by ");
+                        Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+                        tasks.addTask(newDeadline);
+                        storage.save(tasks);
+                        ui.showTaskAdded(newDeadline, tasks.size());
+                        break;
+
+                    case "event":
+                        if (parts.length < 2 || !parts[1].contains(" /from ") || !parts[1].contains(" /to ")) {
+                            ui.showError("Invalid format! Use: event <desc> /from yyyy-MM-dd /to yyyy-MM-dd");
+                            break;
+                        }
+                        String[] eventParts = parts[1].split(" /from | /to ");
+                        Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
+                        tasks.addTask(newEvent);
+                        storage.save(tasks);
+                        ui.showTaskAdded(newEvent, tasks.size());
+                        break;
+
+                    case "mark":
                         try {
-                            LocalDate fromDate = LocalDate.parse(eventDetails[1].trim()); // Validate
-                            LocalDate toDate = LocalDate.parse(eventDetails[2].trim());   // Validate
-                            newEvent = new Event(eventDetails[0].trim(), fromDate.toString(), toDate.toString());
-                            tasks.add(newEvent);
+                            int index = Integer.parseInt(parts[1]) - 1;
+                            tasks.getTask(index).markAsDone();
                             storage.save(tasks);
-                        } catch (DateTimeParseException e) {
-                            System.out.println("____________________________________________________________");
-                            System.out.println("Invalid date format! Use yyyy-MM-dd.");
-                            System.out.println("____________________________________________________________");
+                            System.out.println("Nice! I've marked this task as done:");
+                            System.out.println("  " + tasks.getTask(index));
+                        } catch (Exception e) {
+                            ui.showError("Invalid mark command! Use: mark <task number>");
                         }
+                        break;
 
-                        // Ensure newEvent is not null before printing
-                        if (newEvent != null) {
-                            printTaskAdded(newEvent, tasks.size());
-                        }
-                    } catch (Exception e) {
-                        System.out.println("____________________________________________________________");
-                        System.out.println("Invalid event format! Use: event <description> /from yyyy-MM-dd /to yyyy-MM-dd");
-                        System.out.println("____________________________________________________________");
-                    }
-                }
-                else if (command.equals("deadline")) {
-                    try {
-                        String[] deadlineDetails = parts[1].split("/by", 2);
-                        Task newDeadline = null;  // Declare before try
-
+                    case "unmark":
                         try {
-                            LocalDate parsedDate = LocalDate.parse(deadlineDetails[1].trim()); // Validate date format
-                            newDeadline = new Deadline(deadlineDetails[0].trim(), parsedDate.toString());
-                            tasks.add(newDeadline);
+                            int index = Integer.parseInt(parts[1]) - 1;
+                            tasks.getTask(index).markAsNotDone();
                             storage.save(tasks);
-                        } catch (DateTimeParseException e) {
-                            System.out.println("____________________________________________________________");
-                            System.out.println("Invalid date format! Use yyyy-MM-dd.");
-                            System.out.println("____________________________________________________________");
+                            System.out.println("OK, I've marked this task as not done yet:");
+                            System.out.println("  " + tasks.getTask(index));
+                        } catch (Exception e) {
+                            ui.showError("Invalid unmark command! Use: unmark <task number>");
                         }
+                        break;
 
-                        // Ensure newDeadline is not null before printing
-                        if (newDeadline != null) {
-                            printTaskAdded(newDeadline, tasks.size());
+                    case "delete":
+                        try {
+                            int indexToDelete = Integer.parseInt(parts[1]) - 1;
+                            Task removedTask = tasks.getTask(indexToDelete);
+                            tasks.removeTask(indexToDelete);
+                            storage.save(tasks);
+                            System.out.println("Noted. I've removed this task:");
+                            System.out.println("  " + removedTask);
+                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        } catch (Exception e) {
+                            ui.showError("Invalid delete command! Use: delete <task number>");
                         }
-                    } catch (Exception e) {
-                        System.out.println("____________________________________________________________");
-                        System.out.println("Invalid deadline format! Use: deadline <description> /by yyyy-MM-dd");
-                        System.out.println("____________________________________________________________");
-                    }
-                } else if (command.equals("todo")) {
-                    Task newTask = new Todo(parts[1]);
-                    tasks.add(newTask);
-                    storage.save(tasks); // Save after adding a ToDo
-                    printTaskAdded(newTask, tasks.size());
+                        break;
 
-                } else if (command.equals("mark")) {
-                    int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    tasks.get(taskIndex).markAsDone();
-                    storage.save(tasks); // Save after marking as done
-                    System.out.println("____________________________________________________________");
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println("  " + tasks.get(taskIndex));
-                    System.out.println("____________________________________________________________");
-
-                } else if (command.equals("unmark")) {
-                    int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    tasks.get(taskIndex).markAsNotDone();
-                    storage.save(tasks); // Save after unmarking
-                    System.out.println("____________________________________________________________");
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println("  " + tasks.get(taskIndex));
-                    System.out.println("____________________________________________________________");
-
-                } else if (command.equals("delete")) {
-                    int indexToDelete = Integer.parseInt(parts[1]) - 1;
-                    Task removedTask = tasks.remove(indexToDelete);
-                    storage.save(tasks); // Save after deleting
-                    System.out.println("____________________________________________________________");
-                    System.out.println("Noted. I've removed this task:");
-                    System.out.println("  " + removedTask);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    System.out.println("____________________________________________________________");
-
-                } else {
-                    throw new ShinException("Oops! I'm sorry, but I don't know what that means :-(");
+                    default:
+                        ui.showError("Unknown command.");
                 }
 
-            } catch (ShinException | IOException e) {
-                System.out.println("____________________________________________________________");
-                System.out.println(e.getMessage());
-                System.out.println("____________________________________________________________");
+                ui.showLine();
+            } catch (Exception e) {
+                ui.showError(e.getMessage());
             }
         }
-        scanner.close();
+        ui.closeScanner();
     }
 
-    private static void printTaskList(ArrayList<Task> tasks) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
-        }
-        System.out.println("____________________________________________________________");
-    }
 
-    private static void printTaskAdded(Task task, int taskCount) {
-        System.out.println("____________________________________________________________");
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
-        System.out.println("____________________________________________________________");
+    public static void main(String[] args) {
+        new Shin("data/duke.txt").run();
     }
 }

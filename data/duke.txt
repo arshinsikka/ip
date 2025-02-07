@@ -1,3 +1,7 @@
 D | 0 | return book | 2024-02-07
-D | 0 | return book | 2024-02-07
 D | 0 | return book | 2024-02-06
+D | 0 | return book | 2024-02-07
+E | 0 | Project meeting | 2024-02-09 | 2024-02-10
+T | 0 | Buy groceries
+D | 0 | Finish homework | 2024-02-08
+E | 0 | Project meeting | 2024-02-09 | 2024-02-10

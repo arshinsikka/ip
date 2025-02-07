@@ -1,8 +1,6 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
+import java.util.ArrayList;
 
 public class Storage {
     private String filePath;
@@ -11,6 +9,7 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    // Load tasks from file
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -27,33 +26,49 @@ public class Storage {
             String taskType = taskDetails[0].trim();
             boolean isDone = taskDetails[1].trim().equals("1");
             String description = taskDetails[2].trim();
-            Task task;
+            Task task = null;
 
             switch (taskType) {
                 case "T":
                     task = new Todo(description);
                     break;
                 case "D":
-                    task = new Deadline(description, LocalDate.parse(taskDetails[3].trim()).toString());
+                    try {
+                        LocalDate parsedDate = LocalDate.parse(taskDetails[3].trim());
+                        task = new Deadline(description, parsedDate.toString());
+                    } catch (Exception e) {
+                        System.out.println("Error parsing deadline date: " + taskDetails[3]);
+                    }
                     break;
                 case "E":
-                    task = new Event(description, taskDetails[3].trim(), taskDetails[4].trim());
+                    try {
+                        LocalDate fromDate = LocalDate.parse(taskDetails[3].trim());
+                        LocalDate toDate = LocalDate.parse(taskDetails[4].trim());
+                        task = new Event(description, fromDate.toString(), toDate.toString());
+                    } catch (Exception e) {
+                        System.out.println("Error parsing event date: " + taskDetails[3] + " to " + taskDetails[4]);
+                    }
                     break;
                 default:
+                    System.out.println("Unknown task type found: " + taskType);
                     continue;
             }
-            if (isDone) {
-                task.markAsDone();
+
+            if (task != null) {
+                if (isDone) {
+                    task.markAsDone();
+                }
+                tasks.add(task);
             }
-            tasks.add(task);
         }
         br.close();
         return tasks;
     }
 
-    public void save(ArrayList<Task> tasks) throws IOException {
+    // Save tasks to file
+    public void save(TaskList taskList) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-        for (Task task : tasks) {
+        for (Task task : taskList.getTasks()) {
             String taskData = taskToString(task);
             bw.write(taskData);
             bw.newLine();
@@ -67,9 +82,11 @@ public class Storage {
             return "T | " + status + " | " + task.description;
         } else if (task instanceof Deadline) {
             return "D | " + status + " | " + task.description + " | "
-                    + ((Deadline) task).by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    + ((Deadline) task).by.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } else if (task instanceof Event) {
-            return "E | " + status + " | " + task.description + " | " + ((Event) task).from + " | " + ((Event) task).to;
+            return "E | " + status + " | " + task.description + " | "
+                    + ((Event) task).from.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    + " | " + ((Event) task).to.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
         return "";
     }
