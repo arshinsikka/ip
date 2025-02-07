@@ -92,12 +92,9 @@ public class Storage {
         if (task instanceof Todo) {
             return "T | " + status + " | " + task.getDescription();  // ✅ Use getter
         } else if (task instanceof Deadline) {
-            return "D | " + status + " | " + task.getDescription() + " | "
-                    + ((Deadline) task).getBy().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));  // ✅ Use getter
+            return "D | " + status + " | " + task.getDescription() + " | " + ((Deadline) task).getBy().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));  // ✅ Use getter
         } else if (task instanceof Event) {
-            return "E | " + status + " | " + task.getDescription() + " | "
-                    + ((Event) task).getFrom().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")) + " | "
-                    + ((Event) task).getTo().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));  // ✅ Use getters
+            return "E | " + status + " | " + task.getDescription() + " | " + ((Event) task).getFrom().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")) + " | " + ((Event) task).getTo().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));  // ✅ Use getters
         }
         return "";
     }
