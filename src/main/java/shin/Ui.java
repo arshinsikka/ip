@@ -1,4 +1,7 @@
+package shin;
+
 import java.util.Scanner;
+import shin.task.Task;
 
 public class Ui {
     private Scanner scanner;

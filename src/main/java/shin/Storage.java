@@ -1,6 +1,16 @@
+package shin;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import shin.task.Task;
+import shin.task.Todo;
+import shin.task.Deadline;
+import shin.task.Event;
+import shin.task.TaskList;
+import shin.task.TaskType;
+import shin.exception.ShinException;
 
 public class Storage {
     private String filePath;
@@ -77,16 +87,17 @@ public class Storage {
     }
 
     private String taskToString(Task task) {
-        String status = task.isDone ? "1" : "0";
+        String status = task.isDone() ? "1" : "0";  // ✅ Use getter for isDone
+
         if (task instanceof Todo) {
-            return "T | " + status + " | " + task.description;
+            return "T | " + status + " | " + task.getDescription();  // ✅ Use getter
         } else if (task instanceof Deadline) {
-            return "D | " + status + " | " + task.description + " | "
-                    + ((Deadline) task).by.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return "D | " + status + " | " + task.getDescription() + " | "
+                    + ((Deadline) task).getBy().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));  // ✅ Use getter
         } else if (task instanceof Event) {
-            return "E | " + status + " | " + task.description + " | "
-                    + ((Event) task).from.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                    + " | " + ((Event) task).to.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return "E | " + status + " | " + task.getDescription() + " | "
+                    + ((Event) task).getFrom().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")) + " | "
+                    + ((Event) task).getTo().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));  // ✅ Use getters
         }
         return "";
     }

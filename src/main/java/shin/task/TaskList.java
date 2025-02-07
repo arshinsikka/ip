@@ -1,3 +1,7 @@
+package shin.task;
+
+import shin.task.Task;
+
 import java.util.ArrayList;
 
 public class TaskList {

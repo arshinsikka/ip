@@ -1,3 +1,16 @@
+package shin;
+import shin.Parser;
+import shin.Ui;
+
+import shin.task.Task;
+import shin.task.Todo;
+import shin.task.Deadline;
+import shin.task.Event;
+import shin.task.TaskList;
+import shin.exception.ShinException;
+
+import java.util.Scanner;
+
 public class Shin {
     private Storage storage;
     private TaskList tasks;
