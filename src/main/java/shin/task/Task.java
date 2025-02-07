@@ -17,11 +17,21 @@ public class Task {
         return isDone;
     }
 
+    public String getStatusIcon() {
+        return (isDone ? "X" : " "); // ✅ Returns "[X]" if done, "[ ]" if not
+    }
+
+
     public void markAsDone() {
         isDone = true;
     }
 
     public void markAsNotDone() {
         isDone = false;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + description;
     }
 }

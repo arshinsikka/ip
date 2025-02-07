@@ -20,4 +20,5 @@ public class Deadline extends Task {
         return "[D]" + super.toString() + " (by: "
                 + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
+
 }
