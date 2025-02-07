@@ -10,11 +10,19 @@ import shin.task.TaskList;
 import shin.exception.ShinException;
 
 import java.util.Scanner;
-
+/**
+ * The main chatbot application that handles user input and task management.
+ */
 public class Shin {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+
+    /**
+     * Initializes the chatbot with the given file path for storage.
+     *
+     * @param filePath The file path where tasks are stored.
+     */
 
     public Shin(String filePath) {
         ui = new Ui();
@@ -26,7 +34,9 @@ public class Shin {
             tasks = new TaskList();
         }
     }
-
+    /**
+     * Runs the chatbot, processing user commands in a loop until exit.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -124,6 +134,7 @@ public class Shin {
                     default:
                         ui.showError("Unknown command.");
                 }
+                // Other cases...
 
                 ui.showLine();
             } catch (Exception e) {
@@ -133,6 +144,11 @@ public class Shin {
         ui.closeScanner();
     }
 
+    /**
+     * The main entry point of the chatbot application.
+     *
+     * @param args Command-line arguments (not used).
+     */
 
     public static void main(String[] args) {
         new Shin("data/duke.txt").run();

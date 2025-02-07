@@ -3,8 +3,15 @@ package shin;
 import java.util.Scanner;
 import shin.task.Task;
 
+/**
+ * Handles user interaction with the chatbot.
+ */
 public class Ui {
     private Scanner scanner;
+
+    /**
+     * Displays a welcome message.
+     */
 
     public Ui() {
         this.scanner = new Scanner(System.in);
@@ -21,10 +28,19 @@ public class Ui {
         return scanner.nextLine();
     }
 
+    /**
+     * Prints a horizontal line.
+     */
     public void showLine() {
         System.out.println("____________________________________________________________");
     }
 
+
+    /**
+     * Displays an error message.
+     *
+     * @param message The error message to display.
+     */
     public void showError(String message) {
         System.out.println("Error: " + message);
     }
