@@ -1,6 +1,10 @@
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 
 public class Shin {
     private static final String FILE_PATH = "data/duke.txt";
@@ -39,19 +43,57 @@ public class Shin {
                     printTaskList(tasks);
 
                 } else if (command.equals("event")) {
-                    String[] eventDetails = parts[1].split("/from|/to");
-                    Task newEvent = new Event(eventDetails[0].trim(), eventDetails[1].trim(), eventDetails[2].trim());
-                    tasks.add(newEvent);
-                    storage.save(tasks); // Save after adding a new event
-                    printTaskAdded(newEvent, tasks.size());
+                    try {
+                        String[] eventDetails = parts[1].split("/from|/to");
+                        Task newEvent = null; // Declare before try
 
-                } else if (command.equals("deadline")) {
-                    String[] deadlineDetails = parts[1].split("/by", 2);
-                    Task newDeadline = new Deadline(deadlineDetails[0].trim(), deadlineDetails[1].trim());
-                    tasks.add(newDeadline);
-                    storage.save(tasks); // Save after adding a deadline
-                    printTaskAdded(newDeadline, tasks.size());
+                        try {
+                            LocalDate fromDate = LocalDate.parse(eventDetails[1].trim()); // Validate
+                            LocalDate toDate = LocalDate.parse(eventDetails[2].trim());   // Validate
+                            newEvent = new Event(eventDetails[0].trim(), fromDate.toString(), toDate.toString());
+                            tasks.add(newEvent);
+                            storage.save(tasks);
+                        } catch (DateTimeParseException e) {
+                            System.out.println("____________________________________________________________");
+                            System.out.println("Invalid date format! Use yyyy-MM-dd.");
+                            System.out.println("____________________________________________________________");
+                        }
 
+                        // Ensure newEvent is not null before printing
+                        if (newEvent != null) {
+                            printTaskAdded(newEvent, tasks.size());
+                        }
+                    } catch (Exception e) {
+                        System.out.println("____________________________________________________________");
+                        System.out.println("Invalid event format! Use: event <description> /from yyyy-MM-dd /to yyyy-MM-dd");
+                        System.out.println("____________________________________________________________");
+                    }
+                }
+                else if (command.equals("deadline")) {
+                    try {
+                        String[] deadlineDetails = parts[1].split("/by", 2);
+                        Task newDeadline = null;  // Declare before try
+
+                        try {
+                            LocalDate parsedDate = LocalDate.parse(deadlineDetails[1].trim()); // Validate date format
+                            newDeadline = new Deadline(deadlineDetails[0].trim(), parsedDate.toString());
+                            tasks.add(newDeadline);
+                            storage.save(tasks);
+                        } catch (DateTimeParseException e) {
+                            System.out.println("____________________________________________________________");
+                            System.out.println("Invalid date format! Use yyyy-MM-dd.");
+                            System.out.println("____________________________________________________________");
+                        }
+
+                        // Ensure newDeadline is not null before printing
+                        if (newDeadline != null) {
+                            printTaskAdded(newDeadline, tasks.size());
+                        }
+                    } catch (Exception e) {
+                        System.out.println("____________________________________________________________");
+                        System.out.println("Invalid deadline format! Use: deadline <description> /by yyyy-MM-dd");
+                        System.out.println("____________________________________________________________");
+                    }
                 } else if (command.equals("todo")) {
                     Task newTask = new Todo(parts[1]);
                     tasks.add(newTask);

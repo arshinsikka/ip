@@ -1,5 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 
 public class Storage {
     private String filePath;
@@ -31,7 +34,7 @@ public class Storage {
                     task = new Todo(description);
                     break;
                 case "D":
-                    task = new Deadline(description, taskDetails[3].trim());
+                    task = new Deadline(description, LocalDate.parse(taskDetails[3].trim()).toString());
                     break;
                 case "E":
                     task = new Event(description, taskDetails[3].trim(), taskDetails[4].trim());
@@ -63,7 +66,8 @@ public class Storage {
         if (task instanceof Todo) {
             return "T | " + status + " | " + task.description;
         } else if (task instanceof Deadline) {
-            return "D | " + status + " | " + task.description + " | " + ((Deadline) task).by;
+            return "D | " + status + " | " + task.description + " | "
+                    + ((Deadline) task).by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } else if (task instanceof Event) {
             return "E | " + status + " | " + task.description + " | " + ((Event) task).from + " | " + ((Event) task).to;
         }
