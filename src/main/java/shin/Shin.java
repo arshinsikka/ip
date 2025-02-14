@@ -34,6 +34,17 @@ public class Shin {
             tasks = new TaskList();
         }
     }
+
+    public Shin() {
+        // Initialize necessary fields if any
+    }
+
+    public String getResponse(String input) {
+        // Return a response, you can customize this logic as needed
+        return "Shin heard: " + input;
+    }
+
+
     /**
      * Runs the chatbot, processing user commands in a loop until exit.
      */
