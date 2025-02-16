@@ -69,9 +69,9 @@ public class TaskList {
     public void printTasks() {
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
-        }
+        tasks.stream()
+                .forEach(task -> System.out.println((tasks.indexOf(task) + 1) + ". " + task));
         System.out.println("____________________________________________________________");
     }
+
 }

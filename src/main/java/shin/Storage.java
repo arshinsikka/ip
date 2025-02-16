@@ -79,13 +79,20 @@ public class Storage {
     public void save(TaskList taskList) throws IOException {
         assert taskList != null : "TaskList cannot be null";
         BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-        for (Task task : taskList.getTasks()) {
-            String taskData = taskToString(task);
-            bw.write(taskData);
-            bw.newLine();
-        }
+        taskList.getTasks()
+                .stream()
+                .map(this::taskToString)
+                .forEach(taskData -> {
+                    try {
+                        bw.write(taskData);
+                        bw.newLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
         bw.close();
     }
+
 
     private String taskToString(Task task) {
         String status = task.isDone() ? "1" : "0";  // ✅ Use getter for isDone
