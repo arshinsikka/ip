@@ -4,29 +4,30 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Event extends Task {
-    protected LocalDate from;
-    protected LocalDate to;
+    protected LocalDate startDate;
+    protected LocalDate endDate;
 
     public Event(String description, String from, String to) {
         super(description);
         assert from != null && to != null : "Event dates cannot be null";
-        this.from = LocalDate.parse(from);
-        this.to = LocalDate.parse(to);
-        assert !this.from.isAfter(this.to) : "Event 'from' date cannot be after 'to' date";
+        this.startDate = LocalDate.parse(from);
+        this.endDate = LocalDate.parse(to);
+        assert !this.startDate.isAfter(this.endDate) : "Event 'from' date cannot be after 'to' date";
     }
 
-    public LocalDate getFrom() {   // ✅ Add this getter
-        return from;
+
+    public LocalDate getStartDate() {   // ✅ Add this getter
+        return startDate;
     }
 
-    public LocalDate getTo() {   // ✅ Add this getter
-        return to;
+    public LocalDate getEndDate() {   // ✅ Add this getter
+        return endDate;
     }
 
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: "
-                + from.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
-                + " to: " + to.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+                + startDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
+                + " to: " + endDate.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
     }
 }

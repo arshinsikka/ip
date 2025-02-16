@@ -1,15 +1,12 @@
 package shin.task;
 
-import shin.task.Task;
-
 import java.util.ArrayList;
 
 /**
  * Manages a list of tasks.
  */
-
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     /**
      * Constructs a TaskList with an empty task list.
@@ -69,9 +66,11 @@ public class TaskList {
     public void printTasks() {
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks in your list:");
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
+            sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
         }
+        System.out.print(sb.toString());
         System.out.println("____________________________________________________________");
     }
 }
