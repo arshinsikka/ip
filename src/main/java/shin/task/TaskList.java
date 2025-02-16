@@ -63,14 +63,17 @@ public class TaskList {
     /**
      * Prints all tasks in the list.
      */
+    /**
+     * Prints all tasks in the list.
+     */
     public void printTasks() {
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks in your list:");
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
-        }
-        System.out.print(sb.toString());
+        tasks.stream()
+                .map(task -> (tasks.indexOf(task) + 1) + ". " + task) // Stream approach with task indexing
+                .forEach(System.out::println);
         System.out.println("____________________________________________________________");
     }
+
+
 }

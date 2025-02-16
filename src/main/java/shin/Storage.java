@@ -60,15 +60,21 @@ public class Storage {
     // Save tasks to file
     public void save(TaskList taskList) throws IOException {
         assert taskList != null : "TaskList cannot be null";
+
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            for (Task task : taskList.getTasks()) {
-                bw.write(taskToString(task));
-                bw.newLine();
-            }
+            taskList.getTasks()
+                    .stream()
+                    .map(this::taskToString)
+                    .forEach(taskData -> {
+                        try {
+                            bw.write(taskData);
+                            bw.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
         }
     }
-
-
 
     private String taskToString(Task task) {
         String status = task.isDone() ? "1" : "0";
@@ -77,12 +83,11 @@ public class Storage {
             return "T | " + status + " | " + task.getDescription();
         } else if (task instanceof Deadline) {
             return "D | " + status + " | " + task.getDescription() + " | "
-                    + ((Deadline) task).getEndDate();
+                    + ((Deadline) task).getDueDate(); // Fixed to use getDueDate()
         } else if (task instanceof Event) {
             return "E | " + status + " | " + task.getDescription() + " | "
                     + ((Event) task).getStartDate() + " | " + ((Event) task).getEndDate();
         }
         return "";
     }
-
 }
