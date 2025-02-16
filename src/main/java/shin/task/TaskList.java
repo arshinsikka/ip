@@ -3,6 +3,8 @@ package shin.task;
 import shin.task.Task;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 /**
  * Manages a list of tasks.
@@ -36,6 +38,26 @@ public class TaskList {
         assert task != null : "Task cannot be null";
         tasks.add(task);
     }
+
+
+
+    public void viewSchedule(LocalDate date) {
+        System.out.println("____________________________________________________________");
+        System.out.println("Here are the tasks scheduled for " + date + ":");
+        tasks.stream()
+                .filter(task -> {
+                    if (task instanceof Deadline) {
+                        return ((Deadline) task).getDueDate().equals(date);
+                    } else if (task instanceof Event) {
+                        Event event = (Event) task;
+                        return !event.getStartDate().isAfter(date) && !event.getEndDate().isBefore(date);
+                    }
+                    return false; // Todos are not date-specific
+                })
+                .forEach(System.out::println);
+        System.out.println("____________________________________________________________");
+    }
+
 
     /**
      * Removes a task from the task list.

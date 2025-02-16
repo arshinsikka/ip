@@ -9,6 +9,8 @@ import shin.task.Event;
 import shin.task.TaskList;
 import shin.exception.ShinException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 /**
  * The main chatbot application that handles user input and task management.
@@ -91,6 +93,16 @@ public class Shin {
                         storage.save(tasks);
                         ui.showTaskAdded(newDeadline, tasks.size());
                         break;
+
+                    case "schedule":
+                        try {
+                            LocalDate date = LocalDate.parse(parts[1]); // Parse the date argument
+                            tasks.viewSchedule(date); // Call the method to view tasks for the date
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid date format! Use yyyy-MM-dd.");
+                        }
+                        break;
+
 
                     case "event":
                         if (parts.length < 2 || !parts[1].contains(" /from ") || !parts[1].contains(" /to ")) {

@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class Deadline extends Task {
-    protected LocalDate by;
+    protected LocalDate dueDate;
 
     /**
      * Constructs a Deadline task with a description and due date.
@@ -19,11 +19,11 @@ public class Deadline extends Task {
     public Deadline(String description, String by) {
         super(description);
         assert by != null : "Deadline date cannot be null";
-        this.by = LocalDate.parse(by);
+        this.dueDate = LocalDate.parse(by);
     }
 
-    public LocalDate getBy() {   // ✅ Add this getter
-        return by;
+    public LocalDate getDueDate() {   // ✅ Add this getter
+        return dueDate;
     }
 
     @Override
