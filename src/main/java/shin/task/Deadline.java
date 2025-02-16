@@ -23,7 +23,7 @@ public class Deadline extends Task {
     }
 
 
-    public LocalDate getEndDate() {   // ✅ Add this getter
+    public LocalDate getDueDate() {   // ✅ Add this getter
         return dueDate;
     }
 
