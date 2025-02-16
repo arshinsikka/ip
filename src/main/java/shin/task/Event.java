@@ -9,8 +9,10 @@ public class Event extends Task {
 
     public Event(String description, String from, String to) {
         super(description);
+        assert from != null && to != null : "Event dates cannot be null";
         this.from = LocalDate.parse(from);
         this.to = LocalDate.parse(to);
+        assert !this.from.isAfter(this.to) : "Event 'from' date cannot be after 'to' date";
     }
 
     public LocalDate getFrom() {   // ✅ Add this getter

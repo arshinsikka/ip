@@ -77,6 +77,7 @@ public class Storage {
 
     // Save tasks to file
     public void save(TaskList taskList) throws IOException {
+        assert taskList != null : "TaskList cannot be null";
         BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
         for (Task task : taskList.getTasks()) {
             String taskData = taskToString(task);
@@ -98,4 +99,5 @@ public class Storage {
         }
         return "";
     }
+
 }

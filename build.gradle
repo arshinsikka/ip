@@ -38,6 +38,13 @@ application {
     mainClass = 'shin.Launcher'
 }
 
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'shin.Launcher' // Update with your entry point
+    }
+}
+
 shadowJar {
     archiveBaseName = "shin"
     archiveClassifier = null
