@@ -41,9 +41,12 @@ public class TaskList {
 
 
 
+
+
     public void viewSchedule(LocalDate date) {
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks scheduled for " + date + ":");
+
         tasks.stream()
                 .filter(task -> {
                     if (task instanceof Deadline) {
@@ -55,8 +58,10 @@ public class TaskList {
                     return false; // Todos are not date-specific
                 })
                 .forEach(System.out::println);
+
         System.out.println("____________________________________________________________");
     }
+
 
 
     /**

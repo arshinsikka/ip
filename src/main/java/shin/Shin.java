@@ -95,13 +95,18 @@ public class Shin {
                         break;
 
                     case "schedule":
+                        if (parts.length < 2) {
+                            ui.showError("Please specify a date in the format yyyy-MM-dd.");
+                            break;
+                        }
                         try {
-                            LocalDate date = LocalDate.parse(parts[1]); // Parse the date argument
-                            tasks.viewSchedule(date); // Call the method to view tasks for the date
+                            LocalDate date = LocalDate.parse(parts[1]); // Convert user input into LocalDate
+                            tasks.viewSchedule(date); // Calls TaskList to filter and display tasks
                         } catch (DateTimeParseException e) {
-                            System.out.println("Invalid date format! Use yyyy-MM-dd.");
+                            ui.showError("Invalid date format! Please use: yyyy-MM-dd");
                         }
                         break;
+
 
 
                     case "event":
