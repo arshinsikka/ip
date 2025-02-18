@@ -69,4 +69,4 @@ Online Java resources such as StackOverflow for debugging inspiration.
 SE-EDU GitHub repo for project structure references.
 
 License 📜
-This project is open-source under the MIT License.
+This project is open-sourced under the MIT License.
