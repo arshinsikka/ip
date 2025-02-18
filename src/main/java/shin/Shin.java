@@ -38,18 +38,47 @@ public class Shin {
         // Initialize necessary fields if any
     }
 
-    private static final String[] RESPONSES = {
-            "That’s interesting! Let me note that down.",
-            "Hmm… I'll add this to your list!",
-            "Good one! I'll remember that.",
-            "Got it! Anything else?"
-    };
-
     public String getResponse(String input) {
-        Random random = new Random();
-        int responseIndex = random.nextInt(RESPONSES.length);
-        return RESPONSES[responseIndex];
+        String lowerInput = input.toLowerCase().trim();
+
+        if (lowerInput.startsWith("todo")) {
+            return "Got it! I've added that as a task.";
+        }
+        else if (lowerInput.startsWith("deadline")) {
+            return "Alright! I’ve set a deadline for this task.";
+        }
+        else if (lowerInput.startsWith("event")) {
+            return "Event added! Don't forget to mark it done when it's over.";
+        }
+        else if (lowerInput.equals("list")) {
+            return "Here are all your current tasks!";
+        }
+        else if (lowerInput.startsWith("mark")) {
+            return "Nice! I've marked this task as done ✅.";
+        }
+        else if (lowerInput.startsWith("unmark")) {
+            return "Alright, I've marked this task as not done yet.";
+        }
+        else if (lowerInput.startsWith("delete")) {
+            return "Got it, this task has been removed!";
+        }
+        else if (lowerInput.contains("how are you")) {
+            return "I'm just a chatbot, but I'm here to help! 😊";
+        }
+        else if (lowerInput.contains("hello") || lowerInput.contains("hi")) {
+            return "Hey there! How can I assist you today?";
+        }
+        else if (lowerInput.contains("bye")) {
+            return "Goodbye! Hope to chat with you again soon. 👋";
+        }
+        else if (lowerInput.contains("help")) {
+            return "Sure! You can use commands like 'todo <task>', 'deadline <task> /by <date>', 'event <task> /from <date> /to <date>', 'list', 'mark <task number>', 'unmark <task number>', or 'delete <task number>'.";
+        }
+        else {
+            return "Hmm, I'm not sure what you mean. Try using 'help' to see what I can do! 🤔";
+        }
     }
+
 
 
 
