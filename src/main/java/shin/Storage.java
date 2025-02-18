@@ -26,7 +26,8 @@ public class Storage {
     }
 
     // Load tasks from file
-
+    // @@author arshinsikka-reused
+    // AI-assisted improvement: ChatGPT suggested better error handling for missing files
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -34,12 +35,13 @@ public class Storage {
         // Ensure parent directory exists
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            Files.createFile(Paths.get(filePath));
+            Files.createFile(Paths.get(filePath)); // AI suggested this over file.createNewFile()
             return tasks;
         }
 
         // Use try-with-resources to ensure BufferedReader is closed automatically
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            // Reading tasks logic...
             String line;
             while ((line = br.readLine()) != null) {
                 String[] taskDetails = line.split("\\|");

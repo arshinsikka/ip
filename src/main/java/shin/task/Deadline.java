@@ -34,10 +34,19 @@ public class Deadline extends Task {
         return by;
     }
 
+    /**
+     * Formats the deadline date into a human-readable format.
+     *
+     * @@author arshinsikka-reused
+     * AI-assisted refactoring: ChatGPT suggested using a utility method for formatting dates.
+     */
+    private String formatDate(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+    }
+    // @@author
+
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: "
-                + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
+        return "[D]" + super.toString() + " (by: " + formatDate(by) + ")";
     }
-
 }
