@@ -1,4 +1,5 @@
 package shin;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -26,7 +27,14 @@ public class MainWindow {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+
+        // Ensure Send button works with a mouse click
+        sendButton.setOnMouseClicked(event -> handleUserInput());
+
+        // Ensure ENTER key works to send messages
+        userInput.setOnAction(event -> handleUserInput());
     }
+
 
     public void setShin(Shin s) {
         shin = s;
@@ -34,12 +42,24 @@ public class MainWindow {
 
     @FXML
     private void handleUserInput() {
-        String input = userInput.getText();
+        String input = userInput.getText().trim();  // Trim to remove extra spaces
+        if (input.isEmpty()) { // Prevent empty messages
+            return;
+        }
+
         String response = shin.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
-        );
-        userInput.clear();
+
+        // Ensure UI updates correctly
+        Platform.runLater(() -> {
+            dialogContainer.getChildren().addAll(
+                    DialogBox.getUserDialog(input, userImage),
+                    DialogBox.getDukeDialog(response, dukeImage)
+            );
+            userInput.clear(); // Clear input field after sending
+        });
+
+        // Ensure ScrollPane moves down to show latest messages
+        dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
     }
+
 }
