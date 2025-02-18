@@ -1,7 +1,11 @@
 package shin.task;
 
+import shin.exception.ShinException;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Represents a task with a deadline.
  */
@@ -16,10 +20,14 @@ public class Deadline extends Task {
      * @param by The due date in yyyy-MM-dd format.
      */
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, String by) throws ShinException {
         super(description);
         assert by != null : "Deadline date cannot be null";
-        this.by = LocalDate.parse(by);
+        try {
+            this.by = LocalDate.parse(by);
+        } catch (DateTimeParseException e) {
+            throw new ShinException("Invalid date format! Use yyyy-MM-dd.");
+        }
     }
 
     public LocalDate getBy() {   // ✅ Add this getter

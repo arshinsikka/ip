@@ -8,7 +8,7 @@ import shin.task.Deadline;
 import shin.task.Event;
 import shin.task.TaskList;
 import shin.exception.ShinException;
-import java.util.Random
+import java.util.Random;
 
 import java.util.Scanner;
 /**
@@ -96,10 +96,15 @@ public class Shin {
                             break;
                         }
                         String[] deadlineParts = parts[1].split(" /by ");
-                        Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
-                        tasks.addTask(newDeadline);
-                        storage.save(tasks);
-                        ui.showTaskAdded(newDeadline, tasks.size());
+
+                        try {
+                            Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+                            tasks.addTask(newDeadline);
+                            storage.save(tasks);
+                            ui.showTaskAdded(newDeadline, tasks.size());
+                        } catch (ShinException e) {
+                            ui.showError(e.getMessage());  // ✅ Show user-friendly error message
+                        }
                         break;
 
                     case "event":

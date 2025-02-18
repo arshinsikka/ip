@@ -1,8 +1,13 @@
 package shin;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import shin.task.Task;
 import shin.task.Todo;
@@ -14,64 +19,85 @@ import shin.exception.ShinException;
 
 public class Storage {
     private String filePath;
+    private static final Logger logger = Logger.getLogger(Storage.class.getName());
 
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
     // Load tasks from file
+
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
+
+        // Ensure parent directory exists
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            file.createNewFile();
+            Files.createFile(Paths.get(filePath));
             return tasks;
         }
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] taskDetails = line.split("\\|");
-            String taskType = taskDetails[0].trim();
-            boolean isDone = taskDetails[1].trim().equals("1");
-            String description = taskDetails[2].trim();
-            Task task = null;
+        // Use try-with-resources to ensure BufferedReader is closed automatically
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] taskDetails = line.split("\\|");
 
-            switch (taskType) {
-                case "T":
-                    task = new Todo(description);
-                    break;
-                case "D":
-                    try {
-                        LocalDate parsedDate = LocalDate.parse(taskDetails[3].trim());
-                        task = new Deadline(description, parsedDate.toString());
-                    } catch (Exception e) {
-                        System.out.println("Error parsing deadline date: " + taskDetails[3]);
-                    }
-                    break;
-                case "E":
-                    try {
-                        LocalDate fromDate = LocalDate.parse(taskDetails[3].trim());
-                        LocalDate toDate = LocalDate.parse(taskDetails[4].trim());
-                        task = new Event(description, fromDate.toString(), toDate.toString());
-                    } catch (Exception e) {
-                        System.out.println("Error parsing event date: " + taskDetails[3] + " to " + taskDetails[4]);
-                    }
-                    break;
-                default:
-                    System.out.println("Unknown task type found: " + taskType);
+                // Ensure correct format (at least 3 elements required)
+                if (taskDetails.length < 3) {
+                    logger.log(Level.WARNING, "Skipping malformed task entry: {0}", line);
                     continue;
-            }
-
-            if (task != null) {
-                if (isDone) {
-                    task.markAsDone();
                 }
-                tasks.add(task);
+
+                String taskType = taskDetails[0].trim();
+                boolean isDone = taskDetails[1].trim().equals("1");
+                String description = taskDetails[2].trim();
+                Task task = null;
+
+                try {
+                    switch (taskType) {
+                        case "T":
+                            task = new Todo(description);
+                            break;
+                        case "D":
+                            try {
+                                LocalDate parsedDate = LocalDate.parse(taskDetails[3].trim());
+                                task = new Deadline(description, parsedDate.toString());
+                            } catch (DateTimeParseException | ShinException e) {
+                                logger.log(Level.WARNING, "Skipping invalid deadline entry: {0}", line);
+                                continue; // ✅ Skip this line without crashing
+                            }
+                            break;
+
+                        case "E":
+                            if (taskDetails.length < 5) {
+                                logger.log(Level.WARNING, "Invalid event format: {0}", line);
+                                continue;
+                            }
+                            LocalDate fromDate = LocalDate.parse(taskDetails[3].trim());
+                            LocalDate toDate = LocalDate.parse(taskDetails[4].trim());
+                            task = new Event(description, fromDate.toString(), toDate.toString());
+                            break;
+                        default:
+                            logger.log(Level.SEVERE, "Unknown task type found: {0}", taskType);
+                            continue;
+                    }
+
+                    if (task != null) {
+                        if (isDone) {
+                            task.markAsDone();
+                        }
+                        tasks.add(task);
+                    }
+                } catch (DateTimeParseException e) {
+                    logger.log(Level.SEVERE, "Error parsing date for task: {0}", line);
+                }
             }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error reading file: {0}", filePath);
+            throw e;
         }
-        br.close();
         return tasks;
     }
 
