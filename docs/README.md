@@ -42,6 +42,10 @@ delete <task_number> - Deletes a task.
 Other:
 bye - Exits the program.
 
+A preview of your chatbot GUI (this is where your Ui.png goes!).
+
+![Shin Task Assistant](docs/Ui.png)
+
 Code Structure 📂
 Shin - Main chatbot logic and command handling.
 TaskList - Manages task storage and operations.
