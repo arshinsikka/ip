@@ -1,6 +1,11 @@
 package shin;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -8,13 +13,11 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import shin.task.Task;
 import shin.task.Todo;
 import shin.task.Deadline;
 import shin.task.Event;
 import shin.task.TaskList;
-import shin.task.TaskType;
 import shin.exception.ShinException;
 
 public class Storage {

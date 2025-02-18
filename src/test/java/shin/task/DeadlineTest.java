@@ -2,7 +2,8 @@ package shin.task;
 
 import org.junit.jupiter.api.Test;
 import shin.exception.ShinException;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 
 public class DeadlineTest {
@@ -27,7 +28,8 @@ public class DeadlineTest {
         assertEquals("[D][X] Finish project (by: May 1 2024)", deadline.toString()); // ✅ Check task marked as done
     }
 
-    @Test
+    // @@author arshinsikka-reused
+    // AI-assisted: Suggested adding test case for invalid date format@Test
     public void testInvalidDateFormat() {
         Exception exception = assertThrows(ShinException.class, () -> new Deadline("Invalid task", "10-02-2024"));
         assertEquals("Invalid date format! Use yyyy-MM-dd.", exception.getMessage()); // ✅ Ensures exception is thrown for wrong format

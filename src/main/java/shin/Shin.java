@@ -1,6 +1,5 @@
 package shin;
-import shin.Parser;
-import shin.Ui;
+
 
 import shin.task.Task;
 import shin.task.Todo;
@@ -10,7 +9,6 @@ import shin.task.TaskList;
 import shin.exception.ShinException;
 import java.util.Random;
 
-import java.util.Scanner;
 /**
  * The main chatbot application that handles user input and task management.
  */
