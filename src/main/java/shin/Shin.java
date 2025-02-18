@@ -8,6 +8,7 @@ import shin.task.Deadline;
 import shin.task.Event;
 import shin.task.TaskList;
 import shin.exception.ShinException;
+import java.util.Random
 
 import java.util.Scanner;
 /**
@@ -39,10 +40,19 @@ public class Shin {
         // Initialize necessary fields if any
     }
 
+    private static final String[] RESPONSES = {
+            "That’s interesting! Let me note that down.",
+            "Hmm… I'll add this to your list!",
+            "Good one! I'll remember that.",
+            "Got it! Anything else?"
+    };
+
     public String getResponse(String input) {
-        // Return a response, you can customize this logic as needed
-        return "Shin heard: " + input;
+        Random random = new Random();
+        int responseIndex = random.nextInt(RESPONSES.length);
+        return RESPONSES[responseIndex];
     }
+
 
 
     /**
