@@ -1,26 +1,42 @@
-# Duke project template
+# Shin - A Smart Task Manager 📝
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Shin is a simple, interactive chatbot that helps users manage their tasks efficiently.
+This project was developed as part of the CS2103T Individual Project.
 
-## Setting up in Intellij
+---
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+## Features ✨
+- **Task Management**: Add, mark, and delete tasks (ToDo, Deadline, Event).
+- **GUI Support**: Interactive JavaFX-based graphical interface.
+- **Persistence**: Tasks are stored and reloaded on startup.
+- **Error Handling**: Gracefully handles invalid commands and missing files.
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+---
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+## Usage 🚀
+Run the JAR file:
+```sh
+java -jar shin.jar
+Commands:
+
+todo <task> - Adds a ToDo task.
+deadline <task> /by yyyy-MM-dd - Adds a Deadline task.
+event <task> /from yyyy-MM-dd /to yyyy-MM-dd - Adds an Event task.
+mark <task_number> - Marks task as completed.
+unmark <task_number> - Unmarks task.
+delete <task_number> - Deletes a task.
+list - Displays all tasks.
+bye - Exits the program.
+
+AI Assistance 🤖
+Some portions of this project were improved with AI assistance to enhance code quality and productivity:
+
+Error Handling Improvements (Storage.java): AI suggested better exception handling and missing file creation methods.
+Refactoring of Date Formatting (Deadline.java, Event.java): AI recommended more efficient date parsing methods.
+JUnit Test Cases (DeadlineTest.java, TaskListTest.java): AI-assisted in generating additional test cases for edge cases.
+All AI-assisted code was reviewed, modified, and adapted to ensure correctness and compliance with the course policy.
+
+Acknowledgments 🎓
+This project was developed as part of the CS2103T course at NUS. Special thanks to:
+The CS2103T teaching team for guidance.
+Online Java resources such as StackOverflow for debugging inspiration.
