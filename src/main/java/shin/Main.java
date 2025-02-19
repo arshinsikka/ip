@@ -28,7 +28,7 @@ public class Main extends Application {
             Scene scene = new Scene(ap);
             stage.setScene(scene);
 
-            // ✅ Set Product Name in Title Bar
+            // Set Product Name in Title Bar
             stage.setTitle("Shin - Your Smart Task Assistant");
 
             fxmlLoader.<MainWindow>getController().setShin(new Shin());
