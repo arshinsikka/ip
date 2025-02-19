@@ -1,84 +1,137 @@
-Shin - A Smart Task Manager 📝
-Shin is a simple, interactive chatbot that helps users manage their tasks efficiently.
-This project was developed as part of the CS2103T Individual Project at National University of Singapore (NUS), CS2103T.
+# Shin - A Smart Task Manager 📝
 
-Features ✨
-📝 Task Management: Add, mark, unmark, and delete tasks (ToDo, Deadline, Event).
-🎨 GUI Support: Interactive JavaFX-based graphical interface.
-💾 Persistent Storage: Tasks are saved and automatically reloaded on startup.
-🚦 Robust Error Handling: Gracefully handles invalid commands and missing files.
-⚡ AI-Assisted Improvements: Enhancements in code efficiency and test coverage.
+Shin is an interactive chatbot that helps users efficiently manage tasks.  
+Developed as part of the CS2103T Individual Project at the **National University of Singapore (NUS), CS2103T**.
 
-Getting Started 🚀
-Prerequisites
+## Features ✨  
 
-Ensure you have the following installed:
-Java 17 (including JavaFX)
-Git (for cloning the repository)
+📝 **Task Management**:  
+- Add, mark, unmark, and delete tasks (ToDo, Deadline, Event).  
 
-Installation & Running
-Clone this repository:
+🎨 **Graphical Interface**:  
+- JavaFX-based interactive UI for an intuitive experience.  
+
+💾 **Persistent Storage**:  
+- Tasks are saved automatically and reloaded on startup.  
+
+🚦 **Robust Error Handling**:  
+- Gracefully manages invalid commands and missing files.  
+
+⚡ **AI-Assisted Code Refinements**:  
+- Enhancements in efficiency, exception handling, and test coverage.  
+
+---
+
+## Getting Started 🚀  
+
+### **Prerequisites**  
+Ensure you have the following installed:  
+- **Java 17** (including JavaFX)  
+- **Git** (for cloning the repository)  
+
+### **Installation & Running**  
+Clone this repository:  
+```
 git clone https://github.com/yourusername/ip.git
 cd ip
-Compile and run the application:
+```
+Compile and run the application:  
+```
 ./gradlew run
-OR run the JAR file:
+```
+Or run the JAR file directly:  
+```
 java -jar shin.jar
+```
 
-Usage Commands 💻
-Below are the commands Shin supports:
+---
 
-Task Commands:
-todo <task> - Adds a ToDo task.
-deadline <task> /by YYYY-MM-DD - Adds a Deadline task.
-event <task> /from YYYY-MM-DD /to YYYY-MM-DD - Adds an Event.
+## Usage Commands 💻  
 
-Task Management:
-list - Displays all tasks.
-mark <task_number> - Marks a task as completed.
-unmark <task_number> - Unmarks a completed task.
-delete <task_number> - Deletes a task.
+### **Task Commands**  
+| Command                        | Description                                      |
+|---------------------------------|--------------------------------------------------|
+| `todo <task>`                   | Adds a ToDo task.                               |
+| `deadline <task> /by YYYY-MM-DD` | Adds a Deadline task.                          |
+| `event <task> /from YYYY-MM-DD /to YYYY-MM-DD` | Adds an Event task. |
 
-Other:
-bye - Exits the program.
+### **Task Management Commands**  
+| Command                     | Description                                     |
+|-----------------------------|-------------------------------------------------|
+| `list`                      | Displays all tasks.                            |
+| `mark <task_number>`        | Marks a task as completed.                     |
+| `unmark <task_number>`      | Unmarks a completed task.                      |
+| `delete <task_number>`      | Deletes a task.                                |
 
+### **Other Commands**  
+| Command       | Description                     |
+|--------------|---------------------------------|
+| `bye`       | Exits the program.              |
+| `help`      | Displays usage instructions.    |
 
-❓ FAQ (Frequently Asked Questions)
-1. My tasks are not saved after I close the chatbot. Why?
-📌 Reason: The chatbot automatically saves tasks, but make sure you have write permissions in the directory.
+---
 
-2. Can I use multiple commands at once?
-🚫 No. Only one command per input.
+## ❓ FAQ (Frequently Asked Questions)  
 
-3. What happens if I enter an incorrect command?
-📌 Shin will show an error message with guidance.
+### 1️⃣ **Why are my tasks not saved after closing the chatbot?**  
+📌 The chatbot automatically saves tasks, but ensure you have write permissions in the directory.  
 
+### 2️⃣ **Can I enter multiple commands at once?**  
+🚫 No, Shin processes one command at a time.  
 
-A preview of your chatbot GUI.
+### 3️⃣ **What happens if I enter an incorrect command?**  
+📌 Shin provides an error message along with guidance on the correct format.  
 
-![Shin Task Assistant](Ui.png)
+---
 
-Code Structure 📂
-Shin - Main chatbot logic and command handling.
-TaskList - Manages task storage and operations.
-Task, Todo, Deadline, Event - Different task types.
-Storage - Handles saving and loading tasks from disk.
-Ui - Manages user interaction and messages.
-MainWindow - JavaFX UI Controller.
+## **A Preview of Shin's GUI**  
+![Shin Task Assistant](Ui.png)  
 
-AI Assistance 🤖
-Some portions of this project were improved with AI assistance to enhance code quality and productivity:
-Error Handling Improvements (Storage.java): AI suggested better exception handling and missing file creation methods.
-Refactoring of Date Formatting (Deadline.java, Event.java): AI recommended more efficient date parsing methods.
-JUnit Test Cases (DeadlineTest.java, TaskListTest.java): AI-assisted in generating additional test cases for edge cases.
+---
 
-All AI-assisted code was reviewed, modified, and adapted to ensure correctness and compliance with the course policy.
+## Code Structure 📂  
+- **`Shin`** - Main chatbot logic and command handling.  
+- **`TaskList`** - Manages task storage and operations.  
+- **`Task, Todo, Deadline, Event`** - Different task types.  
+- **`Storage`** - Handles saving and loading tasks from disk.  
+- **`Ui`** - Manages user interaction and messages.  
+- **`MainWindow`** - JavaFX UI Controller.  
 
-Acknowledgments 🎓
-This project was developed as part of the CS2103T Software Engineering module at NUS. Special thanks to:
-The CS2103T teaching team for guidance.
-Online Java resources such as StackOverflow for debugging inspiration.
-SE-EDU GitHub repo for project structure references.
+---
 
-License 📜
-This project is open-sourced under the MIT License.
+## AI Assistance 🤖  
+Some parts of this project were improved using AI to enhance code quality and maintainability:  
+
+- **Error Handling Enhancements** (Storage.java)  
+  - Improved exception handling and automated file creation.  
+- **Refactored Date Formatting** (Deadline.java, Event.java)  
+  - More efficient date parsing methods.  
+- **JUnit Test Cases** (DeadlineTest.java, TaskListTest.java)  
+  - Additional test cases for edge cases.  
+
+✅ **All AI-assisted code was reviewed and refined to comply with course policies.**  
+
+---
+
+## **Acknowledgments 🎓**  
+This project was developed as part of the **CS2103T Software Engineering module at NUS**.  
+Special thanks to:  
+- The **CS2103T teaching team** for their guidance.  
+- Online resources like **StackOverflow** for debugging inspiration.  
+- The **SE-EDU GitHub repository** for reference materials.  
+
+---
+
+## **License 📜**  
+This project is open-sourced under the **MIT License**.  
+
+---
+
+### **Key Improvements in This Version**
+✅ **Better structured Features section** for readability.  
+✅ **More concise descriptions** in all sections.  
+✅ **Usage commands displayed in tables** for easy reference.  
+✅ **FAQ streamlined** for clarity.  
+✅ **Code structure clearly outlined.**  
+
+˚```
