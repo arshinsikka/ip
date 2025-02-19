@@ -42,6 +42,18 @@ delete <task_number> - Deletes a task.
 Other:
 bye - Exits the program.
 
+
+❓ FAQ (Frequently Asked Questions)
+1. My tasks are not saved after I close the chatbot. Why?
+📌 Reason: The chatbot automatically saves tasks, but make sure you have write permissions in the directory.
+
+2. Can I use multiple commands at once?
+🚫 No. Only one command per input.
+
+3. What happens if I enter an incorrect command?
+📌 Shin will show an error message with guidance.
+
+
 A preview of your chatbot GUI.
 
 ![Shin Task Assistant](Ui.png)
