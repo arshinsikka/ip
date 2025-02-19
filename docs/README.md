@@ -46,28 +46,32 @@ java -jar shin.jar
 
 ---
 
-## Usage Commands 💻  
+## Usage Commands 🖥️
 
-### **Task Commands**  
-| Command                        | Description                                      |
-|---------------------------------|--------------------------------------------------|
-| `todo <task>`                   | Adds a ToDo task.                               |
-| `deadline <task> /by YYYY-MM-DD` | Adds a Deadline task.                          |
+### Task Commands
+
+| Command                          | Description                |
+|----------------------------------|----------------------------|
+| `todo <task>`                    | Adds a ToDo task.          |
+| `deadline <task> /by YYYY-MM-DD`  | Adds a Deadline task.      |
 | `event <task> /from YYYY-MM-DD /to YYYY-MM-DD` | Adds an Event task. |
 
-### **Task Management Commands**  
-| Command                     | Description                                     |
-|-----------------------------|-------------------------------------------------|
-| `list`                      | Displays all tasks.                            |
-| `mark <task_number>`        | Marks a task as completed.                     |
-| `unmark <task_number>`      | Unmarks a completed task.                      |
-| `delete <task_number>`      | Deletes a task.                                |
+### Task Management Commands
 
-### **Other Commands**  
-| Command       | Description                     |
-|--------------|---------------------------------|
-| `bye`       | Exits the program.              |
-| `help`      | Displays usage instructions.    |
+| Command              | Description                      |
+|----------------------|----------------------------------|
+| `list`              | Displays all tasks.             |
+| `mark <task_number>` | Marks a task as completed.     |
+| `unmark <task_number>` | Unmarks a completed task.  |
+| `delete <task_number>` | Deletes a task.            |
+
+### Other Commands
+
+| Command  | Description                   |
+|----------|--------------------------------|
+| `bye`    | Exits the program.            |
+| `help`   | Displays usage instructions.  |
+
 
 ---
 

@@ -1,6 +1,5 @@
 package shin;
 
-
 import shin.task.Task;
 import shin.task.Todo;
 import shin.task.Deadline;
@@ -24,32 +23,25 @@ public class Shin {
      *
      * @param filePath The file path where tasks are stored.
      */
-
     public Shin(String filePath) {
         ui = new Ui();
         this.storage = new Storage(filePath);
         try {
             ArrayList<Task> loadedTasks = storage.load();
-            if (loadedTasks != null && !loadedTasks.isEmpty()) {
-                tasks = new TaskList(loadedTasks);
-            } else {
-                tasks = new TaskList(); // Ensure tasks is never null
-            }
+            tasks = (loadedTasks != null && !loadedTasks.isEmpty())
+                    ? new TaskList(loadedTasks)
+                    : new TaskList();
         } catch (Exception e) {
             ui.showLoadingError();
-            tasks = new TaskList(); // Ensure tasks is never null even if storage fails
+            tasks = new TaskList();
         }
     }
 
-
+    /**
+     * Default constructor using the default storage path.
+     */
     public Shin() {
-        storage = new Storage("data/tasks.txt");
-        try {
-            tasks = new TaskList(storage.load()); // ✅ Load tasks from storage
-        } catch (IOException e) {
-            System.out.println("Error loading tasks. Starting fresh list.");
-            tasks = new TaskList(); // ✅ If storage fails, create an empty list
-        }
+        this("data/tasks.txt");
     }
 
     /**
@@ -59,7 +51,9 @@ public class Shin {
      * @return A response string based on the user's input.
      */
     public String getResponse(String input) {
-        if (tasks == null) { tasks = new TaskList(); }
+        if (tasks == null) {
+            tasks = new TaskList();
+        }
         String lower = input.toLowerCase().trim();
         if (lower.startsWith("todo"))      return handleTodo(input);
         if (lower.startsWith("deadline"))  return handleDeadline(input);
@@ -72,6 +66,7 @@ public class Shin {
     }
 
     // --- Helper methods for getResponse() ---
+
     private String handleTodo(String input) {
         String desc = input.substring(4).trim();
         if (desc.isEmpty()) return "Error: Todo description cannot be empty.";
@@ -97,22 +92,15 @@ public class Shin {
     }
 
     private String handleEvent(String input) {
-        if (!input.contains(" /from ") || !input.contains(" /to ")) {
+        if (!input.contains(" /from ") || !input.contains(" /to "))
             return "Error: Invalid event format. Use: event <desc> /from yyyy-MM-dd /to yyyy-MM-dd";
-        }
-
         String[] parts = input.substring(5).split(" /from | /to ", 3);
-        if (parts.length < 3) {
-            return "Error: Missing event description or date range.";
-        }
-
+        if (parts.length < 3) return "Error: Missing event description or date range.";
         Task t = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
         tasks.addTask(t);
-        saveTasks(); // No IOException to catch
-
+        saveTasks();
         return "Event added! Don't forget to mark it done when it's over.";
     }
-
 
     private String handleList() {
         if (tasks.size() == 0) return "Your task list is empty!";
@@ -163,16 +151,15 @@ public class Shin {
     private String handleMisc(String input) {
         if (input.contains("how are you"))
             return "I'm just a chatbot, but I'm here to help! 😊";
-        else if (input.contains("hello") || input.contains("hi"))
+        if (input.contains("hello") || input.contains("hi"))
             return "Hey there! How can I assist you today?";
-        else if (input.contains("bye"))
+        if (input.contains("bye"))
             return "Goodbye! Hope to chat with you again soon. 👋";
-        else if (input.contains("help"))
+        if (input.contains("help"))
             return "Sure! You can use commands like 'todo <task>', 'deadline <task> /by <date>', " +
                     "'event <task> /from <date> /to <date>', 'list', 'mark <task number>', " +
                     "'unmark <task number>', or 'delete <task number>'.";
-        else
-            return "Hmm, I'm not sure what you mean. Try using 'help' to see what I can do! 🤔";
+        return "Hmm, I'm not sure what you mean. Try using 'help' to see what I can do! 🤔";
     }
 
     /**
@@ -214,91 +201,103 @@ public class Shin {
      */
     private boolean executeCommand(String[] parts) {
         String command = parts[0];
-        switch (command) {
-            case "bye":
-                System.out.println("Bye. Hope to see you again soon!");
-                return true;
-            case "list":
-                tasks.printTasks();
-                break;
-            case "todo":
-                if (parts.length < 2) {
-                    ui.showError("Description for todo cannot be empty!");
-                } else {
-                    Task newTodo = new Todo(parts[1]);
-                    tasks.addTask(newTodo);
-                    saveTasks();
-                    ui.showTaskAdded(newTodo, tasks.size());
-                }
-                break;
-            case "deadline":
-                if (parts.length < 2 || !parts[1].contains(" /by ")) {
-                    ui.showError("Invalid format! Use: deadline <desc> /by yyyy-MM-dd");
-                    break;
-                }
-                String[] deadlineParts = parts[1].split(" /by ");
-                try {
-                    Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
-                    tasks.addTask(newDeadline);
-                    saveTasks();
-                    ui.showTaskAdded(newDeadline, tasks.size());
-                } catch (ShinException e) {
-                    ui.showError(e.getMessage());
-                }
-                break;
-            case "event":
-                if (parts.length < 2 || !parts[1].contains(" /from ") || !parts[1].contains(" /to ")) {
-                    ui.showError("Invalid format! Use: event <desc> /from yyyy-MM-dd /to yyyy-MM-dd");
-                    break;
-                }
-                String[] eventParts = parts[1].split(" /from | /to ");
-                Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
-                tasks.addTask(newEvent);
-                saveTasks();
-                ui.showTaskAdded(newEvent, tasks.size());
-                break;
-            case "mark":
-                try {
-                    int index = Integer.parseInt(parts[1]) - 1;
-                    tasks.getTask(index).markAsDone();
-                    saveTasks();
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println("  " + tasks.getTask(index));
-                } catch (Exception e) {
-                    ui.showError("Invalid mark command! Use: mark <task number>");
-                }
-                break;
-            case "unmark":
-                try {
-                    int index = Integer.parseInt(parts[1]) - 1;
-                    tasks.getTask(index).markAsNotDone();
-                    saveTasks();
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println("  " + tasks.getTask(index));
-                } catch (Exception e) {
-                    ui.showError("Invalid unmark command! Use: unmark <task number>");
-                }
-                break;
-            case "delete":
-                try {
-                    int index = Integer.parseInt(parts[1]) - 1;
-                    Task removedTask = tasks.getTask(index);
-                    tasks.removeTask(index);
-                    saveTasks();
-                    System.out.println("Noted. I've removed this task:");
-                    System.out.println("  " + removedTask);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                } catch (Exception e) {
-                    ui.showError("Invalid delete command! Use: delete <task number>");
-                }
-                break;
-            default:
-                ui.showError("Unknown command.");
-        }
+        if ("bye".equals(command)) return handleBye();
+        if ("list".equals(command)) { tasks.printTasks(); return false; }
+        if ("todo".equals(command)) { handleTodoCommand(parts); return false; }
+        if ("deadline".equals(command)) { handleDeadlineCommand(parts); return false; }
+        if ("event".equals(command)) { handleEventCommand(parts); return false; }
+        if ("mark".equals(command)) { handleMarkCommand(parts); return false; }
+        if ("unmark".equals(command)) { handleUnmarkCommand(parts); return false; }
+        if ("delete".equals(command)) { handleDeleteCommand(parts); return false; }
+        ui.showError("Unknown command.");
         return false;
     }
 
-    /**
+    // --- Command Handler Helpers for executeCommand() ---
+
+    private boolean handleBye() {
+        System.out.println("Bye. Hope to see you again soon!");
+        return true;
+    }
+
+    private void handleTodoCommand(String[] parts) {
+        if (parts.length < 2) {
+            ui.showError("Description for todo cannot be empty!");
+            return;
+        }
+        Task newTodo = new Todo(parts[1]);
+        tasks.addTask(newTodo);
+        saveTasks();
+        ui.showTaskAdded(newTodo, tasks.size());
+    }
+
+    private void handleDeadlineCommand(String[] parts) {
+        if (parts.length < 2 || !parts[1].contains(" /by ")) {
+            ui.showError("Invalid format! Use: deadline <desc> /by yyyy-MM-dd");
+            return;
+        }
+        String[] deadlineParts = parts[1].split(" /by ");
+        try {
+            Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+            tasks.addTask(newDeadline);
+            saveTasks();
+            ui.showTaskAdded(newDeadline, tasks.size());
+        } catch (ShinException e) {
+            ui.showError(e.getMessage());
+        }
+    }
+
+    private void handleEventCommand(String[] parts) {
+        if (parts.length < 2 || !parts[1].contains(" /from ") || !parts[1].contains(" /to ")) {
+            ui.showError("Invalid format! Use: event <desc> /from yyyy-MM-dd /to yyyy-MM-dd");
+            return;
+        }
+        String[] eventParts = parts[1].split(" /from | /to ");
+        Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
+        tasks.addTask(newEvent);
+        saveTasks();
+        ui.showTaskAdded(newEvent, tasks.size());
+    }
+
+    private void handleMarkCommand(String[] parts) {
+        try {
+            int index = Integer.parseInt(parts[1]) - 1;
+            tasks.getTask(index).markAsDone();
+            saveTasks();
+            System.out.println("Nice! I've marked this task as done:");
+            System.out.println("  " + tasks.getTask(index));
+        } catch (Exception e) {
+            ui.showError("Invalid mark command! Use: mark <task number>");
+        }
+    }
+
+    private void handleUnmarkCommand(String[] parts) {
+        try {
+            int index = Integer.parseInt(parts[1]) - 1;
+            tasks.getTask(index).markAsNotDone();
+            saveTasks();
+            System.out.println("OK, I've marked this task as not done yet:");
+            System.out.println("  " + tasks.getTask(index));
+        } catch (Exception e) {
+            ui.showError("Invalid unmark command! Use: unmark <task number>");
+        }
+    }
+
+    private void handleDeleteCommand(String[] parts) {
+        try {
+            int index = Integer.parseInt(parts[1]) - 1;
+            Task removedTask = tasks.getTask(index);
+            tasks.removeTask(index);
+            saveTasks();
+            System.out.println("Noted. I've removed this task:");
+            System.out.println("  " + removedTask);
+            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        } catch (Exception e) {
+            ui.showError("Invalid delete command! Use: delete <task number>");
+        }
+    }
+
+/**
      * The main entry point of the chatbot application.
      *
      * @param args Command-line arguments (not used).
