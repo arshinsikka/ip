@@ -52,10 +52,6 @@ public class Shin {
         }
     }
 
-    public TaskList getTasks() {
-        return tasks;
-    }
-
     /**
      * Processes user input and returns an appropriate response from Shin.
      *
