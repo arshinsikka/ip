@@ -3,7 +3,6 @@ package shin.task;
 /**
  * Represents a task with a description and completion status.
  */
-
 public class Task {
     protected String description;
     protected boolean isDone;

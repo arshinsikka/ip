@@ -1,7 +1,4 @@
 package shin.task;
-
-import shin.task.Task;
-
 import java.util.ArrayList;
 
 
@@ -75,5 +72,24 @@ public class TaskList {
                 .forEach(task -> System.out.println((tasks.indexOf(task) + 1) + ". " + task));
         System.out.println("____________________________________________________________");
     }
+
+    /**
+     * Returns all tasks in the list as a formatted string.
+     *
+     * @return A string representation of all tasks.
+     */
+    public String getTaskListAsString() {
+        if (tasks.isEmpty()) {
+            return "Your task list is empty!";
+        }
+
+        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
+        }
+        return sb.toString().trim();
+    }
+
+
 
 }

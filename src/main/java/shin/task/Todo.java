@@ -1,7 +1,4 @@
 package shin.task;
-
-import shin.task.Task;
-
 public class Todo extends Task {
 
     public Todo(String description) {
