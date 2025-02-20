@@ -47,66 +47,53 @@ java -jar shin.jar
 ---
 
 Usage Commands
-
 Adding a ToDo Task
 Command: todo <task>
+
 Example: todo Buy groceries
-
 What it does: Adds a simple ToDo task to your task list.
-
 Adding a Deadline
 Command: deadline <task> /by <YYYY-MM-DD>
+
 Example: deadline Submit report /by 2025-02-28
-
 What it does: Adds a task that must be done before a specific date.
-
 Adding an Event
 Command: event <task> /from <YYYY-MM-DD> /to <YYYY-MM-DD>
+
 Example: event Team meeting /from 2025-03-01 /to 2025-03-05
-
 What it does: Adds a task that spans a specific start and end date.
-
 Listing All Tasks
 Command: list
 
 What it does: Displays all tasks in your list, showing their status (done/not done) and type (ToDo, Deadline, or Event).
-
 Marking a Task as Done
 Command: mark <task_number>
+
 Example: mark 2
-What it does:
-
-Marks the specified task as done.
-
+What it does: Marks the specified task as done.
 Unmarking a Task
 Command: unmark <task_number>
-Example:unmark 2
 
+Example: unmark 2
 What it does: Marks the specified task as not done.
-
 Deleting a Task
 Command: delete <task_number>
+
 Example: delete 3
-
 What it does: Removes the specified task from your list.
-
 Exiting the Program
 Command: bye
 
 What it does: Exits the chatbot.
-
 Viewing Help
 Command: help
 
 What it does: Shows usage instructions and a summary of all available commands.
-
-Tips:
-
+Tips
 Use one command at a time.
 Make sure dates follow the YYYY-MM-DD format.
 Task numbers refer to their position in the displayed list.
 If you see formatting issues, try spacing out your parameters carefully.
-
 ---
 
 ## ❓ FAQ (Frequently Asked Questions)  

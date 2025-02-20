@@ -8,4 +8,4 @@ D | 0 | Finish assignment | 2025-02-25
 E | 0 | Team meeting | 2025-03-10 | 2025-03-10
 T | 0 | Finish homework
 D | 0 | Submit report | 2025-02-25
-E | 0 | Team meeting | 2025-03-01 | 2025-03-05
+E | 1 | Team meeting | 2025-03-01 | 2025-03-05
