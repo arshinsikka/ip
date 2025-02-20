@@ -63,9 +63,6 @@ public class TaskList {
     /**
      * Prints all tasks in the list.
      */
-    /**
-     * Prints all tasks in the list.
-     */
     public void printTasks() {
         System.out.println("____________________________________________________________");
         System.out.println("Here are the tasks in your list:");
@@ -75,5 +72,20 @@ public class TaskList {
         System.out.println("____________________________________________________________");
     }
 
+    /**
+     * Returns all tasks in the list as a formatted string.
+     *
+     * @return A string representation of all tasks.
+     */
+    public String getTaskListAsString() {
+        if (tasks.isEmpty()) {
+            return "Your task list is empty!";
+        }
 
+        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
+        }
+        return sb.toString().trim();
+    }
 }

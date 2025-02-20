@@ -3,7 +3,6 @@ package shin.task;
 /**
  * Represents a task with a description and completion status.
  */
-
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -48,6 +47,7 @@ public class Task {
      * Marks the task as not completed.
      */
     public void markAsNotDone() {
+
         isDone = false;
     }
 

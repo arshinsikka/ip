@@ -1,0 +1,11 @@
+T | 0 | buy grocery
+T | 0 | work hard
+T | 0 | buy groceries
+D | 0 | submit report | 2025-02-20
+E | 0 | attend conference | 2025-03-01 | 2025-03-05
+T | 0 | Read research paper
+D | 0 | Finish assignment | 2025-02-25
+E | 0 | Team meeting | 2025-03-10 | 2025-03-10
+T | 0 | Finish homework
+D | 0 | Submit report | 2025-02-25
+E | 0 | Team meeting | 2025-03-01 | 2025-03-05
